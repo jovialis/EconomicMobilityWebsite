@@ -50,7 +50,7 @@ app.use('/api', apiRouter);
 // Set up frontend engine
 app.engine("pug", require("pug").__express);
 app.set("views", __dirname);
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, '../../../public')));
 
 // Give them the SPA base page
 app.get("*", async (req, res) => {
