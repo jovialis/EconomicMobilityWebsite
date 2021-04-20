@@ -102,12 +102,29 @@ class MyApp extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{
+                minHeight: "100vh",
+                display: "flex",
+                flexDirection: "column"
+            }}>
                 <StyledNavBar>
                     <Navbar theme={"white"}>
                         <Nav>
                             <NavItem>
-                                <NavLink disabled>
+                                <NavLink disabled style={{
+                                    display: "inline-flex",
+                                    alignItems: "center"
+                                }}>
+                                    <div style={{
+                                        height: "1.5rem",
+                                        marginRight: "0.8rem",
+                                        display: "inline-block"
+                                    }}>
+                                        <img src={"/images/icon-192.png"} style={{
+                                            height: "100%",
+                                            width: "auto"
+                                        }}/>
+                                    </div>
                                     Neighborhood Explorer
                                     {this.state.respondent && (
                                         ` (${this.state.respondent}${ this.state.zip ? `, ZIP: ${this.state.zip}` : ""})`
@@ -117,9 +134,13 @@ class MyApp extends Component {
                         </Nav>
                     </Navbar>
                 </StyledNavBar>
-                <BrowserRouter>
-                    <Route path="/" render={this.renderStatus}/>
-                </BrowserRouter>
+                <div style={{
+                    flexGrow: 1
+                }}>
+                    <BrowserRouter>
+                        <Route path="/" render={this.renderStatus}/>
+                    </BrowserRouter>
+                </div>
                 <div style={{
                     marginTop: "4rem",
                     height: "6rem",
