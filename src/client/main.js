@@ -1,14 +1,23 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
 import styled from "styled-components";
-import { BrowserRouter, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 
-import {Login} from "./components/login";
-import {HouseSearch} from "./components/housesearch";
+import {RateHouses} from "./pages/rateHouses";
 import {Header} from "./components/header";
 
-import axios from "axios";
+import CompletedPage from "./pages/completed";
+import LoginPage from "./pages/login";
+import SelectZipPage from "./pages/selectZip";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+import "shards-ui/dist/css/shards.min.css"
+import {Nav, Navbar, NavbarBrand, NavItem, NavLink} from "shards-react";
+
+const StyledNavBar = styled.div`
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #ebebeb;
+`;
 
 const GridBase = styled.div`
   display: grid;
@@ -36,61 +45,84 @@ class MyApp extends Component {
         super(props);
 
         // If the user has logged in, grab info from sessionStorage
-        this.state = window.__PRELOADED_STATE__;
+        const preloaded = window.__PRELOADED_STATE__ || {};
+        this.state = {
+            status: preloaded.state,
+            respondent: preloaded.respondent,
+            zip: preloaded.zip
+        };
 
         // just gotta do this cause React
-        this.loggedIn = this.loggedIn.bind(this);
-        this.logIn = this.logIn.bind(this);
-        this.logOut = this.logOut.bind(this);
+        this.renderStatus = this.renderStatus.bind(this);
+        this.updateStatus = this.updateStatus.bind(this);
+
+        this.setRespondent = this.setRespondent.bind(this);
+        this.updateZIP = this.updateZIP.bind(this);
+    }
+
+    setRespondent(rid) {
+        this.setState({
+            respondent: rid
+        });
+    }
+
+    updateZIP(zip) {
+        this.setState({
+            zip
+        });
+    }
+
+    updateStatus(status) {
+        this.setState({
+            status
+        });
     }
 
     // is the respondent logged in?
-    loggedIn() {
-        return this.state.respondentId;
-    }
-
-    // Log a respondent in
-    logIn(respondentId) {
-        console.log(`called login function with ${respondentId}`);
-
-        // backend call to log a respondent in
-        axios.post('/api/respondent/login', {
-            respondentId
-        }).then(res => {
-            this.setState(res.data);
-        }).catch(err => {
-            alert("An unexpected error occurred.");
-            console.log(err);
-        });
-    }
-
-    logOut() {
-        // backend call to log a respondent out
-        axios.post('/api/respondent/logout', {}).then(res => {
-            this.setState(null);
-        }).catch(err => {
-            alert("An unexpected error occurred.");
-            console.log(err);
-        });
+    renderStatus(props) {
+        switch (this.state.status) {
+            case 'select_zip':
+                return <SelectZipPage
+                    {...props}
+                    updateStatus={this.updateStatus}
+                    updateZIP={this.updateZIP}
+                />
+            case 'rank_houses':
+                return <RateHouses {...props} updateStatus={this.updateStatus}/>
+            case 'completed':
+                return <CompletedPage {...props}/>
+            default:
+                return <LoginPage
+                    {...props}
+                    updateStatus={this.updateStatus}
+                    setRespondent={this.setRespondent}
+                />
+        }
     }
 
     render() {
         return (
             <div>
-            <Header/>
-             {/* BrowserRouter is around so other paths can be created */}
-            <BrowserRouter>
-                <Route path="/" render={props =>
-                    // if loggedIn, display the search menu
-                    // if not, show login page
-                    this.loggedIn() ?
-                        (<HouseSearch {...props} respondentId={this.state.respondentId}/>):
-                        (<Login {...props} logIn={this.logIn}/>)
-                }/>
-            </BrowserRouter>
+                <StyledNavBar>
+                    <Navbar theme={"white"}>
+                        <Nav>
+                            <NavItem>
+                                <NavLink disabled>
+                                    Neighborhood Explorer
+                                    {this.state.respondent && (
+                                        ` (${this.state.respondent}${ this.state.zip ? `, ZIP: ${this.state.zip}` : ""})`
+                                    )}
+                                </NavLink>
+                            </NavItem>
+                        </Nav>
+                    </Navbar>
+                </StyledNavBar>
+                <BrowserRouter>
+                    <Route path="/" render={this.renderStatus}/>
+                </BrowserRouter>
             </div>
-    );
+        );
     }
 }
 
-render(<MyApp />, document.getElementById("mainDiv"));
+render(<MyApp />, document.getElementById("app"));
