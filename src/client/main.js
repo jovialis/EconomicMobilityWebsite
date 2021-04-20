@@ -115,17 +115,7 @@ class MyApp extends Component {
                                     display: "inline-flex",
                                     alignItems: "center"
                                 }}>
-                                    <div style={{
-                                        height: "1.5rem",
-                                        marginRight: "0.8rem",
-                                        display: "inline-block"
-                                    }}>
-                                        <img src={"/images/icon-192.png"} style={{
-                                            height: "100%",
-                                            width: "auto"
-                                        }}/>
-                                    </div>
-                                    Neighborhood Explorer
+                                    🏡 Neighborhood Explorer
                                     {this.state.respondent && (
                                         ` (${this.state.respondent}${ this.state.zip ? `, ZIP: ${this.state.zip}` : ""})`
                                     )}
