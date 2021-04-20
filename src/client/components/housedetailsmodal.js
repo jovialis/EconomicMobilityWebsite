@@ -21,7 +21,7 @@ show={show}
                     sqft={houseInfo.sqft}
  */
 
-Modal.setAppElement('#mainDiv');
+Modal.setAppElement('#app');
 
 const customStyles = {
     content : {

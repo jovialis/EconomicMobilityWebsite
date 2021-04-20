@@ -7,27 +7,12 @@ import CustomMarker from "./custommarker";
 /*******************************************************************/
 
 const GoogleMapBase = styled.div`
-  position: relative;
-  padding-right: 4px;
-  width: 27%;
-  display: flex;
-  //height: 100%;
+  height: 25rem;
+  width: 100%;
 `;
 
 // this google map component caused me trouble
-export const GoogleMapDisplay = ({ houses = [], setShow, setTargetHouse}) => {
-    if (!houses){
-        console.log("Houses in null or undefined");
-        return (
-            <GoogleMapBase>
-                <GoogleMapReact
-                    bootstrapURLKeys={{ key: "AIzaSyDL_A5wQnUSyio3otmRzu3N5yl9-eaQyZY" }}
-                    defaultZoom={ 12 }
-                >
-                </GoogleMapReact>
-            </GoogleMapBase>
-        );
-    }
+export const GoogleMapDisplay = ({ houses, setShow, setTargetHouse}) => {
 
     let center = {};
     let markers = [];

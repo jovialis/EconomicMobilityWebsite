@@ -51,6 +51,12 @@ router.post('/', async (req, res, next) => {
         return res.status(400).json({error: "Invalid rating submitted."});
     }
 
+    // Make sure that none of the values are duplicates
+    const uniqueValues = [...new Set(Object.values(validation.value))];
+    if (uniqueValues.length < 4) {
+        return res.status(400).json({error: "You may not rank a house two times!"});
+    }
+
     // Lookup each home:
     const ratingSchema = {
         respondent: req.session.respondent,
@@ -70,7 +76,7 @@ router.post('/', async (req, res, next) => {
     await Rating.create(ratingSchema);
 
     console.log(`Saved the rating for respondent ${req.session.respondentId}.`);
-    return res.status(200).json({success: true});
+    return res.status(200).json({state: "completed"});
 });
 
 module.exports = router;

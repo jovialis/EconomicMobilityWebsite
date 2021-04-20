@@ -37,11 +37,16 @@ function exportHome(h) {
  * @param {req.params.zipcode} Zipcode of the homes to query for
  * @return {200, {username, primary_email, first_name, last_name, city, games[...]}}
  */
-router.get('/:zipcode', async (req, res, next) => {
+router.get('/', async (req, res, next) => {
 
     // No respondent? Ignore
     if (!req.session.respondent) {
         return res.status(401).json({error: "User not authenticated."});
+    }
+
+    // No set zip? Return error
+    if (!req.session.respondent.zip) {
+        return res.status(400).json({error: "You must set your ZIP code first!"});
     }
 
     // Look for an existing sample of homes
@@ -55,37 +60,7 @@ router.get('/:zipcode', async (req, res, next) => {
     }
 
     const {experimentalGroup} = req.session.respondent;
-
-    // Validation schema
-    const schema = Joi.object({
-        zipcode: Joi.string().pattern(new RegExp('^[0-9]{5}$'))
-    });
-
-    const validation = schema.validate(req.params);
-    if (validation.error) {
-        return res.status(400).json({error: "Invalid ZIP code provided."});
-    }
-
-    // Parse as a number
-    const zip = validation.value.zipcode;
-
-    // Count the number of homes
-    const numHomes = await Home.countDocuments({zip});
-    if (numHomes < 1) {
-        return res.status(404).json({error: "Unknown ZIP code provided."});
-    }
-
-    // Make sure there are enough homes of the right types in that ZIP code.
-    const numRich = await Home.countDocuments({zip, classification: 'rich'});
-    const numMedium = await Home.countDocuments({zip, classification: 'medium'});
-    const numPoor = await Home.countDocuments({zip, classification: 'poor'});
-
-    if (numRich < 10 || numMedium < 10 || numMedium < 10) {
-        console.log(`Not enough homes with each classification in the zipcode ${req.params.zipcode}`);
-        console.log("Poor count: " + numPoor + ", Medium count: " + numMedium + ", Rich count: " + numRich);
-
-        return res.status(400).json({error: "Not enough homes in that ZIP code."});
-    }
+    const zip = req.session.respondent.zip;
 
     let homes;
 
@@ -125,7 +100,7 @@ router.get('/:zipcode', async (req, res, next) => {
                 {$match: { zip, classification: 'poor' }},
                 {$sample: {size: 5}}
             ]);
-            homes = concat(rich, poor);
+            homes = rich.concat(poor);
             break;
 
         // Default: Error

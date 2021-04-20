@@ -14,6 +14,8 @@ const MongoStore = require("connect-mongo");
 const path = require("path");
 const config = require('../config');
 
+const userState = require('./helpers/userState');
+
 // Setup our Express pipeline
 let app = express();
 
@@ -51,23 +53,20 @@ app.set("views", __dirname);
 app.use(express.static(path.join(__dirname, "../../../public")));
 
 // Give them the SPA base page
-app.get("*", (req, res) => {
-
-    if (!req.session.respondent){
-        if (!(req.path === '/' || req.path === ("/v1/respondent"))){
-            return res.status(401).send();
-        }
-    }
+app.get("*", async (req, res) => {
 
     const respondent = req.session.respondent;
+    const state = await userState.getUserState(respondent);
+
     console.log(`Loading app for: ${respondent ? respondent.respondentId : "nobody!"}`);
-    let preloadedState = respondent
-        ? {
-            respondentId: respondent.respondentId
-        }
-        : {};
-    preloadedState = JSON.stringify(preloadedState).replace(/</g, "\\u003c");
-    res.render("base.pug", {
+    let preloadedState = {
+        state,
+        respondent: respondent && respondent.respondentId,
+        zip: respondent && respondent.zip
+    };
+
+    preloadedState = JSON.stringify(preloadedState);
+    res.render("../../client/base.pug", {
         state: preloadedState
     });
 });
