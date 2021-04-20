@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {HouseCardList} from "../components/housecardlist";
-import GoogleMapCard from "../components/googleMapCard";
+import {HouseCardList} from "../../components/housecardlist";
+import GoogleMapCard from "../../components/googleMapCard";
 import axios from "axios";
-import ErrorBase from "../components/error";
+import ErrorBase from "../../components/error";
 import {
     Card,
     CardBody,
@@ -16,156 +16,70 @@ import {
     Modal,
     ModalBody,
     Row,
-    ModalFooter, Button, Alert, CardHeader, CardFooter, Collapse, Badge, CardSubtitle
+    ModalFooter, Button, Alert, CardHeader, CardFooter, Collapse, Badge, CardSubtitle, FormCheckbox
 } from "shards-react";
-import HouseCard from "../components/houseCard";
+import HouseCard from "../../components/houseCard";
 import {func} from "prop-types";
 import {Image} from "react-bootstrap";
-
-/*************************************************************************/
-
-const LandingBase = styled.div`
-  justify-content: right;
-`;
-
-const DescriptionStyle = styled.div`
-  position: relative;
-  align-content: left;
-  text-align: left;
-  padding-top: 5px;
-  padding-left: 10px;
-  color: #191970;
-`;
-
-const SearchBar = styled.form`
-  display: flex;
-  justify-content: right;
-  width: 100%;
-  height: 5%;
-  overflow: hidden;
-  padding-top: 45px;
-  padding-bottom: 10px;
-  padding-left: 5px;
-  border-bottom: 1px solid #b8b8b8;
-`;
-
-const FormInput = styled.input`
-  margin: 5px 5px;
-  width: 30%;
-  padding-left: 5px;
-`;
-
-const FormInput2 = styled.select`
-  margin: 5px 5px;
-  width: 18vw;
-  padding-left: 5px;
-`;
-
-const FormButton = styled.button`
-  margin: 5px 5px;
-  width: 12vw;
-  max-height: 3em;
-  background: #6495ed;
-  border: none;
-  border-radius: 5px;
-  line-height: 3em;
-  font-size: 0.8em;
-`;
-
-const ContentRow = styled.div`
-  display: flex;
-  width: 100%;
-  height: 80%;
-`;
-
-const Label = styled.div`
-  display: flex;
-  justify-content: right;
-  font-size: 14px;
-  height: 6%;
-  padding-top: 15px;
-  padding-bottom: 10px;
-  margin-left: 5px;
-`;
 
 const CardMargins = styled.div`
     margin-bottom: 2rem;
 `
 
-export const RateHouses = ({updateStatus}) => {
-    // full search results for houses within the zip code
-    const [houses, setHouses] = useState(null);
+function NextStateButton({nextState, setRatingStatus, valid, selectedHouse, setSelection, finalSelection}) {
+    return (
+        <Button
+            outline={!valid}
+            theme={"success"}
+            block
+            disabled={!valid}
+            style={{
+                marginBottom: "1rem"
+            }}
+            onClick={(e) => {
+                e.preventDefault();
+                setSelection(selectedHouse);
+                setRatingStatus(nextState);
+            }}
+        >
+            {finalSelection ? "Finish" : valid ? "Continue" : "Complete Selection to Continue"}
+        </Button>
+    )
+}
+
+export default function MakeSelection({setRatingStatus, houses, nextState, prompt, setSelection, itemPrompt, excludeHouses, finalSelection}) {
+    // Exclude certain houses that have already been picked
+    const excludedHousesIndexes = (excludeHouses || []).map(h => h.index);
+    houses = houses.filter(h => !excludedHousesIndexes.includes(h.index));
 
     // Show intro modal
     const [showTutorial, setShowTutorial] = useState(true);
     const [showInstructions, setShowInstructions] = useState(false);
 
-    // What houses we've looked at
-    const [visitedHouses, setVisitedHouses] = useState([]);
+    // What house we're currently looking at
     const [curHouse, setCurHouse] = useState(null);
 
-    // boolean for showing a detailed house card
-    const [show, setShow] = useState(false);
+    // What house we've selected
+    const [selectedHouse, setSelectedHouse] = useState(null);
 
-    // target house for the detailed house card
-    const [targetHouse, setTargetHouse] = useState(null);
-
-    // Error for nonexistent zip code
-    const [error, setError] = useState(false);
-
-    const [address1, setAddress1] = useState("");
-    const [address2, setAddress2] = useState("");
-    const [address3, setAddress3] = useState("");
-    const [address4, setAddress4] = useState("");
-
-    const [startTime, setStartTime] = useState(null);
-
-
-    // Load houses when the page is loaded
-    useEffect(() => {
-        // backend data requests for this zip
-        axios.get(`/api/home`, {
-            withCredentials: true
-        }).then(res => {
-            let homes = res.data.homes;
-            homes = [...Array(homes.length).keys()].map(k => {
-                const home = homes[k];
-                home.index = k + 1;
-                return home;
-            });
-
-            setHouses(homes);
-        }).catch(err => {
-            console.log(err);
-            setError(err.response && err.response.data.error);
-        });
-    }, []);
-
-    function showHouseDetails(house) {
-        // Mark the house as visited if it isn't already
-        const houseIndex = house.index;
-        if (!visitedHouses.includes(houseIndex)) {
-            setVisitedHouses([...visitedHouses, houseIndex]);
-        }
-
-        // Set the current house
-        setCurHouse(house);
-    }
-
-    function isVisited(house) {
-        const index = house.index;
-        return visitedHouses.includes(index);
-    }
-
-    if (!houses) {
-        return (
-            <React.Fragment/>
-        )
+    function isToggled(house) {
+        return selectedHouse && selectedHouse.address === house.address;
     }
 
     return (
         <Container>
             <Row>
+                <Col xs={12}>
+                    <NextStateButton
+                        nextState={nextState}
+                        setRatingStatus={setRatingStatus}
+                        valid={!!selectedHouse}
+                        selectedHouse={selectedHouse}
+                        setSelection={setSelection}
+                        prompt={prompt}
+                        finalSelection={finalSelection}
+                    />
+                </Col>
                 <Col xs={12}>
                     <CardMargins>
                         <Button
@@ -194,12 +108,16 @@ export const RateHouses = ({updateStatus}) => {
                                             Look at all of the houses.
                                         </li>
                                         <li>
-                                            View their interiors by clicking <Badge>View More Photos &rarr;</Badge> under each house, or by selecting them on the map.
+                                            {prompt} by clicking <span style={{
+                                                display: "inline-block",
+                                                fontWeight: "bold"
+                                            }}
+                                        ><FormCheckbox toggle checked={false} small>{itemPrompt}</FormCheckbox></span>.
                                         </li>
                                     </ul>
                                 </CardBody>
                                 <CardFooter>
-                                    Once you have explored all of the houses in your neighborhood, you will be able to continue.
+                                    Once you have picked, you will be able to <Badge theme={"success"}>Continue</Badge>.
                                 </CardFooter>
                             </Card>
                         </Collapse>
@@ -208,29 +126,41 @@ export const RateHouses = ({updateStatus}) => {
             </Row>
             <Row>
                 <Col xs={12}>
-                    <h4>Your Neighborhood</h4>
-                </Col>
-            </Row>
-            <Row>
-                <Col xs={12}>
-                    <CardMargins>
-                        <GoogleMapCard houses={houses} showHouseDetails={showHouseDetails}/>
-                    </CardMargins>
-                </Col>
-            </Row>
-            <Row>
-                <Col xs={12}>
-                    <h4>Houses</h4>
+                    <h4>{prompt}</h4>
                 </Col>
             </Row>
             <Row>
                 {houses.map(h => (
                     <Col sm={6} lg={3}>
                         <CardMargins>
-                            <HouseCard house={h} showHouseDetails={showHouseDetails} visited={isVisited(h)}/>
+                            <HouseCard
+                                house={h}
+                                showHouseDetails={setCurHouse}
+                                visited={false}
+                                toggle={setSelectedHouse}
+                                toggleLabel={itemPrompt}
+                                isToggled={isToggled(h)}
+                            />
                         </CardMargins>
                     </Col>
                 ))}
+            </Row>
+            <Row>
+                <Col xs={12}>
+                    <div style={{
+                        marginTop: "1rem"
+                    }}>
+                        <NextStateButton
+                            nextState={nextState}
+                            setRatingStatus={setRatingStatus}
+                            valid={!!selectedHouse}
+                            selectedHouse={selectedHouse}
+                            setSelection={setSelection}
+                            prompt={prompt}
+                            finalSelection={finalSelection}
+                        />
+                    </div>
+                </Col>
             </Row>
             <Modal size={"lg"} open={!!curHouse} toggle={() => setCurHouse(null)} backdrop className={"modal-dialog-scrollable"} >
                 {!!curHouse && (
@@ -269,19 +199,37 @@ export const RateHouses = ({updateStatus}) => {
                             </Container>
                         </ModalBody>
                         <ModalFooter>
+                            <div
+                                style={{
+                                    marginRight: "auto"
+                                }}
+                            >
+                                <FormCheckbox
+                                    toggle
+                                    checked={isToggled(curHouse)}
+                                    onChange={() => setSelectedHouse(curHouse)}
+                                >
+                                    <b>{itemPrompt}</b>
+                                </FormCheckbox>
+                            </div>
                             <Button onClick={() => setCurHouse(null)}>Close</Button>
                         </ModalFooter>
                     </React.Fragment>
                 )}
             </Modal>
             <Modal size={"lg"} open={showTutorial} backdrop>
-                <ModalHeader>Welcome to Your Neighborhood!</ModalHeader>
+                <ModalHeader>
+                    {prompt}
+                </ModalHeader>
                 <ModalBody>
                     <p>
-                        To get started, please <b>look at all of the houses.</b> You must also <b>explore the interiors</b> of the houses by clicking <Badge>View More Photos &rarr;</Badge> under each house, or by selecting them on the map.
+                        To get started, please <b>look at all of the houses again.</b>
                     </p>
                     <p style={{marginBottom: 0}}>
-                        Once you have explored all of the houses in your neighborhood, you will be able to continue.
+                        {prompt} by clicking <span style={{
+                            display: "inline-block",
+                            fontWeight: "bold"
+                        }}><FormCheckbox toggle checked={false} small>{itemPrompt}</FormCheckbox></span>.
                     </p>
                 </ModalBody>
                 <ModalFooter>

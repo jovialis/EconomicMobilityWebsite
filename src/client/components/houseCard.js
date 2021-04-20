@@ -2,17 +2,15 @@
  * Created on 4/19/21 by jovialis (Dylan Hanson)
  **/
 
-import {Button, Card, CardBody, CardFooter, CardImg, CardSubtitle, CardTitle} from "shards-react";
+import {Button, Card, CardBody, CardFooter, CardImg, CardSubtitle, CardTitle, FormCheckbox} from "shards-react";
 import React from "react";
 import styled from "styled-components";
 
-const ClickableCard = styled.div`
-  &:hover {
-    cursor: pointer;
-  }
+const ToggleMargins = styled.div`
+    margin-top: 1rem;
 `
 
-export default function HouseCard({showHouseDetails, house, visited}) {
+export default function HouseCard({showHouseDetails, house, visited, toggle, isToggled, toggleLabel}) {
     let { address, price, photos, bedrooms, bathrooms, sqft, lat, lng, index } = house;
 
     address = address.replace(/-/g, " ");
@@ -22,7 +20,9 @@ export default function HouseCard({showHouseDetails, house, visited}) {
     );
 
     return (
-        <Card>
+        <Card style={{
+            border: (!!toggle && !!toggleLabel) && isToggled && "2px solid #28a745"
+        }}>
             <CardImg
                 style={{
                     height: "13rem",
@@ -74,6 +74,16 @@ export default function HouseCard({showHouseDetails, house, visited}) {
                 >
                     View More Photos {visited ? "✅" : "→"}
                 </Button>
+                {(!!toggle && !!toggleLabel) && (
+                    <ToggleMargins>
+                        <FormCheckbox
+                            toggle
+                            checked={isToggled}
+                            onChange={() => toggle(house)}>
+                            <b>{toggleLabel}</b>
+                        </FormCheckbox>
+                    </ToggleMargins>
+                )}
             </CardFooter>
         </Card>
     );

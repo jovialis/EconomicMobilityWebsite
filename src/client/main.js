@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import styled from "styled-components";
 import { BrowserRouter, Route } from "react-router-dom";
 
-import {RateHouses} from "./pages/rateHouses";
+import RateHouses, {Index} from "./pages/rateHouses";
 import {Header} from "./components/header";
 
 import CompletedPage from "./pages/completed";
@@ -120,6 +120,17 @@ class MyApp extends Component {
                 <BrowserRouter>
                     <Route path="/" render={this.renderStatus}/>
                 </BrowserRouter>
+                <div style={{
+                    marginTop: "4rem",
+                    height: "6rem",
+                    backgroundColor: "#ebebeb",
+                    color: "gray",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center"
+                }}>
+                    Copyright 2021
+                </div>
             </div>
         );
     }
