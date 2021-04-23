@@ -47,7 +47,6 @@ function NextStateButton({nextState, setRatingStatus, valid}) {
 export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
     // Show intro modal
     const [showTutorial, setShowTutorial] = useState(true);
-    const [showInstructions, setShowInstructions] = useState(false);
 
     // What houses we've looked at
     const [visitedHouses, setVisitedHouses] = useState([]);
@@ -81,41 +80,28 @@ export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
                 </Col>
                 <Col xs={12}>
                     <CardMargins>
-                        <Button
-                            theme={"light"}
-                            block
-                            onClick={() => setShowInstructions(!showInstructions)}
+                        <Card
+                            outline={true}
                             style={{
-                                borderRadius: `.25rem .25rem ${ showInstructions ? "0 0" : ".25rem .25rem" }`
+                                boxShadow: "none",
+                                border: "1px solid #ebebeb",
                             }}
                         >
-                            Instructions
-                        </Button>
-                        <Collapse open={showInstructions}>
-                            <Card
-                                outline={true}
-                                style={{
-                                    boxShadow: "none",
-                                    border: "1px solid #ebebeb",
-                                    borderRadius: "0 0 .625rem .625rem"
-                                }}
-                            >
-                                <CardBody>
-                                    <CardTitle>Instructions</CardTitle>
-                                    <ul style={{marginBottom: 0}}>
-                                        <li>
-                                            Look at all of the houses.
-                                        </li>
-                                        <li>
-                                            View their interiors by clicking <Badge>View More Photos &rarr;</Badge> under each house, or by selecting them on the map.
-                                        </li>
-                                    </ul>
-                                </CardBody>
-                                <CardFooter>
-                                    Once you have explored all of the houses in your neighborhood, you will be able to <Badge theme={"success"}>Continue</Badge>.
-                                </CardFooter>
-                            </Card>
-                        </Collapse>
+                            <CardBody>
+                                <CardTitle>Instructions</CardTitle>
+                                <ul style={{marginBottom: 0}}>
+                                    <li>
+                                        Look at all of the houses.
+                                    </li>
+                                    <li>
+                                        View their interiors by clicking <Badge>View More Photos &rarr;</Badge> under each house, or by selecting them on the map.
+                                    </li>
+                                </ul>
+                            </CardBody>
+                            <CardFooter>
+                                <b>You must explore all of the houses before you will be able to <Badge theme={"success"}>Continue</Badge>.</b>
+                            </CardFooter>
+                        </Card>
                     </CardMargins>
                 </Col>
             </Row>
@@ -138,7 +124,7 @@ export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
             </Row>
             <Row>
                 {houses.map(h => (
-                    <Col sm={6} lg={3}>
+                    <Col xs={12} sm={6} lg={4} xl={3}>
                         <CardMargins>
                             <HouseCard house={h} showHouseDetails={showHouseDetails} visited={isVisited(h)}/>
                         </CardMargins>

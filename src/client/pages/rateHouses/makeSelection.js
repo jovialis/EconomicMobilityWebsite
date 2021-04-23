@@ -54,7 +54,6 @@ export default function MakeSelection({setRatingStatus, houses, nextState, promp
 
     // Show intro modal
     const [showTutorial, setShowTutorial] = useState(true);
-    const [showInstructions, setShowInstructions] = useState(false);
 
     // What house we're currently looking at
     const [curHouse, setCurHouse] = useState(null);
@@ -82,45 +81,29 @@ export default function MakeSelection({setRatingStatus, houses, nextState, promp
                 </Col>
                 <Col xs={12}>
                     <CardMargins>
-                        <Button
-                            theme={"light"}
-                            block
-                            onClick={() => setShowInstructions(!showInstructions)}
+                        <Card
+                            outline={true}
                             style={{
-                                borderRadius: `.25rem .25rem ${ showInstructions ? "0 0" : ".25rem .25rem" }`
+                                boxShadow: "none",
+                                border: "1px solid #ebebeb"
                             }}
                         >
-                            Instructions
-                        </Button>
-                        <Collapse open={showInstructions}>
-                            <Card
-                                outline={true}
-                                style={{
-                                    boxShadow: "none",
-                                    border: "1px solid #ebebeb",
-                                    borderRadius: "0 0 .625rem .625rem"
-                                }}
-                            >
-                                <CardBody>
-                                    <CardTitle>Instructions</CardTitle>
-                                    <ul style={{marginBottom: 0}}>
-                                        <li>
-                                            Look at all of the houses.
-                                        </li>
-                                        <li>
-                                            {prompt} by clicking <span style={{
-                                                display: "inline-block",
-                                                fontWeight: "bold"
-                                            }}
-                                        ><FormCheckbox toggle checked={false} small>{itemPrompt}</FormCheckbox></span>.
-                                        </li>
-                                    </ul>
-                                </CardBody>
-                                <CardFooter>
-                                    Once you have picked, you will be able to <Badge theme={"success"}>Continue</Badge>.
-                                </CardFooter>
-                            </Card>
-                        </Collapse>
+                            <CardBody>
+                                <CardTitle>Instructions</CardTitle>
+                                <ul style={{marginBottom: 0}}>
+                                    <li>
+                                        {prompt} by clicking <span style={{
+                                        display: "inline-block",
+                                        fontWeight: "bold"
+                                    }}
+                                    ><FormCheckbox toggle checked={false} small>{itemPrompt}</FormCheckbox></span>.
+                                    </li>
+                                </ul>
+                            </CardBody>
+                            <CardFooter>
+                                Once you have picked, you will be able to <Badge theme={"success"}>Continue</Badge>.
+                            </CardFooter>
+                        </Card>
                     </CardMargins>
                 </Col>
             </Row>
@@ -131,7 +114,7 @@ export default function MakeSelection({setRatingStatus, houses, nextState, promp
             </Row>
             <Row>
                 {houses.map(h => (
-                    <Col sm={6} lg={3}>
+                    <Col xs={12} sm={6} lg={4} xl={3}>
                         <CardMargins>
                             <HouseCard
                                 house={h}
@@ -222,9 +205,6 @@ export default function MakeSelection({setRatingStatus, houses, nextState, promp
                     {prompt}
                 </ModalHeader>
                 <ModalBody>
-                    <p>
-                        To get started, please <b>look at all of the houses again.</b>
-                    </p>
                     <p style={{marginBottom: 0}}>
                         {prompt} by clicking <span style={{
                             display: "inline-block",
