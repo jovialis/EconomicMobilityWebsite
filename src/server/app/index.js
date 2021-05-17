@@ -3,7 +3,7 @@
  **/
 
 const express = require("express");
-const mongoose = require('mongoose');
+const cors = require('cors');
 
 const bodyParser = require("body-parser");
 const logger = require("morgan");
@@ -19,11 +19,17 @@ const userState = require('./utils/userState');
 // Setup our Express pipeline
 let app = express();
 
+if (config.PRODUCTION) {
+    app.use(cors());
+}
+
 app.use(logger(config.DEVELOPMENT ? "dev" : "short"));
 
 // JSON parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+
 
 // Sessions support
 app.use(session({
