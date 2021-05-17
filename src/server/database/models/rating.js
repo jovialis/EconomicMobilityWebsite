@@ -14,6 +14,12 @@ let ratingSchema = new mongoose.Schema({
     worstAddress2: {type: mongoose.Types.ObjectId, ref: "Home", required: true}, // Second worst
     worstAddress1: {type: mongoose.Types.ObjectId, ref: "Home", required: true}, // Worst
 
+    // Created on
+    createdOn: {
+        type: Date,
+        default: Date.now
+    },
+
 });
 
 mongoose.model('Rating', ratingSchema);

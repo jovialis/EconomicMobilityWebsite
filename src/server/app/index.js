@@ -14,7 +14,7 @@ const MongoStore = require("connect-mongo");
 const path = require("path");
 const config = require('../config');
 
-const userState = require('./helpers/userState');
+const userState = require('./utils/userState');
 
 // Setup our Express pipeline
 let app = express();
@@ -42,6 +42,9 @@ app.use(session({
         domain: config.SESSION_DOMAIN
     }
 }));
+
+const loadRespondent = require('./middleware/loadRespondent');
+loadRespondent(app);
 
 // Register routes
 const apiRouter = require('./routes');

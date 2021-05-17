@@ -8,8 +8,13 @@ const Joi = require('joi');
 const mongoose = require('mongoose');
 const Respondent = mongoose.model('Respondent');
 const Home = mongoose.model('Home');
+const Rating = mongoose.model('Rating');
 
-const userState = require('../helpers/userState');
+const userState = require('../utils/userState');
+
+const loginRespondent = require('../utils/loginRespondent');
+
+const validateZIP = require('../utils/validateZIP');
 
 /*
  * Logging a respondent in / creating a respondent
@@ -21,51 +26,22 @@ router.post("/login", async (req, res, next) => {
     if (req.session.respondent) {
         return res.status(200).json({
             state: await userState.getUserState(req.session.respondent),
-            respondent: req.session.respondent.respondentId,
-            zip: req.session.respondent.zip
+            respondent: req.session.respondent.respondentId
         });
     }
 
-    // Validation schema
-    const schema = Joi.object({
-        respondentId: Joi.string().alphanum().min(4).max(10)
-    });
+    try {
+        // Attempt to login the user and return the results.
+        const loginRes = await loginRespondent(req.body.respondentId);
+        req.session.respondent = loginRes.respondent;
 
-    const validation = schema.validate(req.body);
-    if (validation.error) {
-        return res.status(400).json({error: "Invalid respondent ID provided."});
-    }
-
-    const respondentId = validation.value.respondentId.toLowerCase();
-
-    // Check if a respondent by that ID already exists.
-    const existingRespondent = await Respondent.findOne({ respondentId })
-    if (existingRespondent) {
-        // Update last login
-        await Respondent.updateOne({_id: existingRespondent._id}, {
-            lastLogin: Date.now()
-        });
-
-        // Store the session
-        req.session.respondent = existingRespondent;
         return res.status(200).json({
-            state: await userState.getUserState(existingRespondent),
-            respondent: existingRespondent.respondentId,
-            zip: existingRespondent.zip
+            respondent: loginRes.respondent.respondentId,
+            state: loginRes.state
         });
+    } catch (err) {
+        return res.status(400).json({error: err.message});
     }
-
-    // Otherwise, generate a new respondent document and save it
-    req.session.respondent = await Respondent.create({
-        respondentId,
-        experimentalGroup: Math.ceil(Math.random()*4),
-    });
-
-    res.status(200).json({
-        state: await userState.getUserState(req.session.respondent),
-        respondent: req.session.respondent.respondentId,
-        zip: req.session.respondent.zip
-    });
 });
 
 /**
@@ -95,31 +71,46 @@ router.post('/zip', async (req, res, next) => {
     // Parse as a number
     const zip = validation.value.zip;
 
-    // Validate the ZIP code.
-    // Count the number of homes
-    const numHomes = await Home.countDocuments({zip});
-    if (numHomes < 1) {
-        return res.status(404).json({error: "We don't have enough data on that ZIP code."});
-    }
-
-    // Make sure there are enough homes of the right types in that ZIP code.
-    const numRich = await Home.countDocuments({zip, classification: 'rich'});
-    const numMedium = await Home.countDocuments({zip, classification: 'medium'});
-    const numPoor = await Home.countDocuments({zip, classification: 'poor'});
-
-    if (numRich < 10 || numMedium < 10 || numMedium < 10) {
-        console.log(`Not enough homes with each classification in the zipcode ${req.params.zipcode}`);
-        console.log("Poor count: " + numPoor + ", Medium count: " + numMedium + ", Rich count: " + numRich);
-        return res.status(400).json({error: "We don't have enough data on that ZIP code."});
+    // Make sure the ZIP is valid
+    try {
+        await validateZIP(zip);
+    } catch (e) {
+        return res.status(400).json({error: e.message});
     }
 
     // We've successfully validated everything, so now let's update the respondent's ZIP
     req.session.respondent.zip = zip;
+    await Respondent.updateOne({
+        _id: req.session.respondent._id
+    }, {
+        zip
+    });
 
     res.status(200).json({
         state: await userState.getUserState(req.session.respondent),
         zip
     });
 });
+
+
+/**
+ * Returns true/false depending on whether a respondent with the given ID has completed the survey
+ * @param {req.query.id}
+ */
+router.post("/completed", async (req, res, next) => {
+    const respondentId = req.query.id;
+
+    // Attempts to find a respondent by that ID.
+    const respondent = await Respondent.findOne({respondentId});
+    if (!respondent) {
+        return res.json({complete: false});
+    }
+
+    // Returns complete if there's a corresponding Rating document.
+    return res.json({
+        complete: (await Rating.countDocuments({respondent}) > 0)
+    })
+});
+
 
 module.exports = router;

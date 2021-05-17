@@ -71,6 +71,69 @@ export default function RateHouses ({updateStatus}) {
         });
     }, []);
 
+    // Update the partials when the partial ratings come in
+    useEffect(() => {
+        if (!favoriteHouse1) {
+            return;
+        }
+
+        // Backend data request to update the favorite house.
+        axios.post('/api/rating/partial', {
+            key: 'bestAddress1',
+            value: favoriteHouse1.address
+        }).then(res => {
+            console.log('Saved partial best address 1');
+        }).catch(console.log);
+    }, [favoriteHouse1]);
+
+
+    // Update the partials when the partial ratings come in
+    useEffect(() => {
+        if (!favoriteHouse2) {
+            return;
+        }
+
+        // Backend data request to update the favorite house.
+        axios.post('/api/rating/partial', {
+            key: 'bestAddress2',
+            value: favoriteHouse2.address
+        }).then(res => {
+            console.log('Saved partial best address 2');
+        }).catch(console.log);
+    }, [favoriteHouse2]);
+
+
+    // Update the partials when the partial ratings come in
+    useEffect(() => {
+        if (!worstHouse2) {
+            return;
+        }
+
+        // Backend data request to update the favorite house.
+        axios.post('/api/rating/partial', {
+            key: 'worstAddress2',
+            value: worstHouse2.address
+        }).then(res => {
+            console.log('Saved partial worst address 2');
+        }).catch(console.log);
+    }, [worstHouse2]);
+
+
+    // Update the partials when the partial ratings come in
+    useEffect(() => {
+        if (!worstHouse1) {
+            return;
+        }
+
+        // Backend data request to update the favorite house.
+        axios.post('/api/rating/partial', {
+            key: 'worstAddress1',
+            value: worstHouse1.address
+        }).then(res => {
+            console.log('Saved partial worst address 1');
+        }).catch(console.log);
+    }, [worstHouse1]);
+
     function submit() {
         if (!favoriteHouse1 || !favoriteHouse2 || !worstHouse1 || !worstHouse2) {
             return;

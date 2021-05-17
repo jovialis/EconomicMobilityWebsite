@@ -17,9 +17,10 @@ mongoose.connect(config.MONGODB_URI, {
 }).catch(err => {
     console.log("Connection ERROR: " + err);
     process.exit(-1);
-})
+});
 
 require('./models/home');
 require('./models/rating');
 require('./models/respondent');
 require('./models/homeSample');
+require('./models/incompleteRating');

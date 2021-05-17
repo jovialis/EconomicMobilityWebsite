@@ -45,7 +45,8 @@ router.get('/', async (req, res, next) => {
     }
 
     // No set zip? Return error
-    if (!req.session.respondent.zip) {
+    const zip = req.session.respondent.zip;
+    if (!zip) {
         return res.status(400).json({error: "You must set your ZIP code first!"});
     }
 
@@ -60,7 +61,6 @@ router.get('/', async (req, res, next) => {
     }
 
     const {experimentalGroup} = req.session.respondent;
-    const zip = req.session.respondent.zip;
 
     let homes;
 
