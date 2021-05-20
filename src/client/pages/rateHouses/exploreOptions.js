@@ -89,17 +89,20 @@ export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
                         >
                             <CardBody>
                                 <CardTitle>Instructions</CardTitle>
-                                <ul style={{marginBottom: 0}}>
+                                <ul style={{marginBottom: 0, fontSize: "1.5rem"}}>
                                     <li>
-                                        Look at all of the houses.
+                                        Please look at all of the houses.
                                     </li>
                                     <li>
-                                        View their interiors by clicking <Badge>View More Photos &rarr;</Badge> under each house, or by selecting them on the map.
+                                        <b><span style={{color: "red"}}>You have to view the interiors of each and every house</span><b/> by clicking <Badge>View More Photos &rarr;</Badge> or by selecting it on the map.</b>
+                                    </li>
+                                    <li>
+                                        <b>You will not be compensated unless you complete this task.</b>
                                     </li>
                                 </ul>
                             </CardBody>
                             <CardFooter>
-                                <b>You must explore all of the houses before you will be able to <Badge theme={"success"}>Continue</Badge>.</b>
+                                <b>YOU MUST EXPLORE ALL OF THE HOUSES BEFORE YOU WILL BE ABLE TO <Badge theme={"success"}>Continue</Badge>.</b>
                             </CardFooter>
                         </Card>
                     </CardMargins>
@@ -107,7 +110,7 @@ export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
             </Row>
             <Row>
                 <Col xs={12}>
-                    <h4>Your Neighborhood</h4>
+                    <h4>Neighborhood Map</h4>
                 </Col>
             </Row>
             <Row>
@@ -187,14 +190,19 @@ export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
                 )}
             </Modal>
             <Modal size={"lg"} open={showTutorial} backdrop>
-                <ModalHeader>Welcome to Your Neighborhood!</ModalHeader>
+                <ModalHeader>Welcome to The Neighborhood!</ModalHeader>
                 <ModalBody>
-                    <p>
-                        To get started, please <b>look at all of the houses.</b> You must also <b>explore the interiors</b> of the houses by clicking <Badge>View More Photos &rarr;</Badge> under each house, or by selecting them on the map.
-                    </p>
-                    <p style={{marginBottom: 0}}>
-                        Once you have explored all of the houses in your neighborhood, you will be able to <Badge theme={"success"}>Continue</Badge>.
-                    </p>
+                    <span style={{fontSize: "1.5rem"}}>
+                        <p>
+                            To get started, please <b>look at all of the houses.</b>
+                        </p>
+                        <p >
+                            <b><span style={{color: "red"}}>You have to view the interiors of each and every house</span></b> by clicking <Badge>View More Photos &rarr;</Badge> or by selecting it on the map. You will not be compensated unless you complete this task.
+                        </p>
+                        <p style={{marginBottom: 0}}>
+                            <b>YOU MUST EXPLORE ALL THE HOUSES BEFORE YOU WILL BE ABLE TO <Badge theme={"success"}>Continue</Badge>.</b>
+                        </p>
+                    </span>
                 </ModalBody>
                 <ModalFooter>
                     <Button onClick={() => setShowTutorial(false)}>Explore &rarr;</Button>
