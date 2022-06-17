@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 // Represents the homes selected for a given user to review.
 const homeSampleSchema = new mongoose.Schema({
 
-    zip: { type: String, required: true },
+    zip: {type: String, required: true},
 
     respondent: {
         type: mongoose.Types.ObjectId,

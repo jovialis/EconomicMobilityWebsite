@@ -8,3 +8,11 @@ public/js/vendor.*
 /public/testImages/*
 /public/images/*
 .env
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

@@ -9,8 +9,8 @@ import {Card, CardBody} from "shards-react";
 import styled from "styled-components";
 
 const GoogleMapBase = styled.div`
-    height: 25rem;
-    width: 100%;
+  height: 25rem;
+  width: 100%;
 `;
 
 export default function GoogleMapCard({houses, showHouseDetails}) {
@@ -35,9 +35,9 @@ export default function GoogleMapCard({houses, showHouseDetails}) {
                 <GoogleMapBase>
                     {/* // Someone else's component */}
                     <GoogleMapReact
-                        bootstrapURLKeys={{ key: "AIzaSyDL_A5wQnUSyio3otmRzu3N5yl9-eaQyZY" }}
+                        bootstrapURLKeys={{key: "AIzaSyCFv04UuNwVEogQyB0CojonVeQu0PNW9GI"}}
                         center={center}
-                        defaultZoom={ 13 }
+                        defaultZoom={13}
                     >
                         {houses.map(h => (
                             <CustomMarker house={h} showHouseDetails={showHouseDetails} lat={h.lat} lng={h.lng}/>

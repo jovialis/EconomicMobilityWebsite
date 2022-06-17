@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 let incompleteRatingSchema = new mongoose.Schema({
 
     // Identification
-    respondent: { type: mongoose.Types.ObjectId, ref: 'Respondent', required: true, unique: true },
+    respondent: {type: mongoose.Types.ObjectId, ref: 'Respondent', required: true, unique: true},
     homeSample: {type: mongoose.Types.ObjectId, ref: 'HomeSample', required: true, unique: true},
 
     // Ranked addresses

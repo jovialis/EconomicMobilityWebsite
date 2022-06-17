@@ -1,36 +1,17 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {HouseCardList} from "../../components/housecardlist";
-import GoogleMapCard from "../../components/googleMapCard";
 import axios from "axios";
-import ErrorBase from "../../components/error";
-import {
-    Card,
-    CardBody,
-    CardColumns,
-    CardImg,
-    CardTitle,
-    ModalHeader,
-    Col,
-    Container,
-    Modal,
-    ModalBody,
-    Row,
-    ModalFooter, Button, Alert, CardHeader, CardFooter, Collapse, Badge, CardSubtitle
-} from "shards-react";
-import HouseCard from "../../components/houseCard";
-import {func} from "prop-types";
-import {Image} from "react-bootstrap";
+import {Alert} from "shards-react";
 import ExploreOptions from "./exploreOptions";
 import MakeSelection from "./makeSelection";
 
 /*************************************************************************/
 
 const CardMargins = styled.div`
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 `
 
-export default function RateHouses ({updateStatus}) {
+export default function RateHouses({updateStatus}) {
     // full search results for houses within the zip code
     const [houses, setHouses] = useState(null);
 

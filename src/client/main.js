@@ -1,10 +1,8 @@
-import React, { Component } from "react";
-import { render } from "react-dom";
+import React, {Component} from "react";
+import {render} from "react-dom";
 import styled from "styled-components";
-import { BrowserRouter, Route } from "react-router-dom";
 
-import RateHouses, {Index} from "./pages/rateHouses";
-import {Header} from "./components/header";
+import RateHouses from "./pages/rateHouses";
 
 import CompletedPage from "./pages/completed";
 import LoginPage from "./pages/login";
@@ -12,7 +10,7 @@ import SelectZipPage from "./pages/selectZip";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css"
-import {Nav, Navbar, NavbarBrand, NavItem, NavLink} from "shards-react";
+import {Nav, Navbar, NavItem, NavLink} from "shards-react";
 
 const StyledNavBar = styled.div`
   margin-bottom: 2rem;
@@ -117,7 +115,7 @@ class MyApp extends Component {
                                 }}>
                                     🏡 Neighborhood Explorer
                                     {this.state.respondent && (
-                                        ` (${this.state.respondent}${ this.state.zip ? `, ZIP: ${this.state.zip}` : ""})`
+                                        ` (${this.state.respondent}${this.state.zip ? `, ZIP: ${this.state.zip}` : ""})`
                                     )}
                                 </NavLink>
                             </NavItem>
@@ -127,9 +125,10 @@ class MyApp extends Component {
                 <div style={{
                     flexGrow: 1
                 }}>
-                    <BrowserRouter>
-                        <Route path="/" render={this.renderStatus}/>
-                    </BrowserRouter>
+                    {/*<BrowserRouter>*/}
+                    {/*    <Route path="/" render={this.renderStatus}/>*/}
+                    {/*</BrowserRouter>*/}
+                    {this.renderStatus()}
                 </div>
                 <div style={{
                     marginTop: "4rem",
@@ -147,4 +146,4 @@ class MyApp extends Component {
     }
 }
 
-render(<MyApp />, document.getElementById("app"));
+render(<MyApp/>, document.getElementById("app"));

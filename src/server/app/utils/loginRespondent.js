@@ -26,7 +26,7 @@ module.exports = async function (respondentId) {
     respondentId = validation.value.respondentId.toLowerCase();
 
     // Check if a respondent by that ID already exists.
-    const existingRespondent = await Respondent.findOne({ respondentId })
+    const existingRespondent = await Respondent.findOne({respondentId})
     if (existingRespondent) {
         // Update last login
         await Respondent.updateOne({_id: existingRespondent._id}, {
@@ -42,7 +42,7 @@ module.exports = async function (respondentId) {
     // Otherwise, generate a new respondent document and save it
     const respondent = await Respondent.create({
         respondentId,
-        experimentalGroup: Math.ceil(Math.random()*4),
+        experimentalGroup: Math.ceil(Math.random() * 4),
     });
 
     return ({

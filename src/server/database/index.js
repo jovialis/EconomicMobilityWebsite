@@ -6,11 +6,11 @@ const mongoose = require('mongoose');
 const config = require('../config');
 
 mongoose.connect(config.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
 }).then(res => {
 
-    res.set('useNewUrlParser', true);
+    // res.set('useNewUrlParser', true);
 
     console.log(`MongoDB connected.`);
 

@@ -4,9 +4,9 @@ const mongoose = require("mongoose");
 let respondentSchema = new mongoose.Schema({
 
     // Identifier for the respondent
-    respondentId: { type: String, required: true, lowercase: true, unique: true },
-    experimentalGroup: { type: Number, min: 1, max: 4, required: true },
-    zip: { type: String },
+    respondentId: {type: String, required: true, lowercase: true, unique: true},
+    experimentalGroup: {type: Number, min: 1, max: 4, required: true},
+    zip: {type: String},
 
     // Last login
     lastLogin: {

@@ -69,7 +69,7 @@ router.get('/', async (req, res, next) => {
         // Sample 10 random rich homes
         case 1:
             homes = await Home.aggregate([
-                {$match: { zip, classification: 'rich' }},
+                {$match: {zip, classification: 'rich'}},
                 {$sample: {size: 10}}
             ]);
             break;
@@ -77,7 +77,7 @@ router.get('/', async (req, res, next) => {
         // Sample 10 random poor homes
         case 2:
             homes = await Home.aggregate([
-                {$match: { zip, classification: 'poor' }},
+                {$match: {zip, classification: 'poor'}},
                 {$sample: {size: 10}}
             ]);
             break;
@@ -85,7 +85,7 @@ router.get('/', async (req, res, next) => {
         // Sample 10 random medium homes
         case 3:
             homes = await Home.aggregate([
-                {$match: { zip, classification: 'medium' }},
+                {$match: {zip, classification: 'medium'}},
                 {$sample: {size: 10}}
             ]);
             break;
@@ -93,11 +93,11 @@ router.get('/', async (req, res, next) => {
         // Sample 5 rich and 5 poor homes
         case 4:
             const rich = await Home.aggregate([
-                {$match: { zip, classification: 'rich' }},
+                {$match: {zip, classification: 'rich'}},
                 {$sample: {size: 5}}
             ]);
             const poor = await Home.aggregate([
-                {$match: { zip, classification: 'poor' }},
+                {$match: {zip, classification: 'poor'}},
                 {$sample: {size: 5}}
             ]);
             homes = rich.concat(poor);

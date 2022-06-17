@@ -5,7 +5,7 @@
 const mongoose = require('mongoose');
 const Home = mongoose.model('Home');
 
-module.exports = async function(zip) {
+module.exports = async function (zip) {
 
     // Validate the ZIP code.
     // Count the number of homes

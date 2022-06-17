@@ -12,7 +12,7 @@ const UserState = {
     COMPLETED: 'completed'
 };
 
-module.exports.getUserState = async function(respondent) {
+module.exports.getUserState = async function (respondent) {
     // No respondent
     if (!respondent) {
         return UserState.LOGIN;

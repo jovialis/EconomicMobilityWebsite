@@ -7,11 +7,11 @@ import React from "react";
 import styled from "styled-components";
 
 const ToggleMargins = styled.div`
-    margin-top: 1rem;
+  margin-top: 1rem;
 `
 
 export default function HouseCard({showHouseDetails, house, visited, toggle, isToggled, toggleLabel}) {
-    let { address, price, photos, bedrooms, bathrooms, sqft, lat, lng, index } = house;
+    let {address, price, photos, bedrooms, bathrooms, sqft, lat, lng, index} = house;
 
     address = address.replace(/-/g, " ");
     const thumbnail = photos[0].replace(

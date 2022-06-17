@@ -6,7 +6,7 @@ const SORT_FIELD_NAME = "price"
 
 // sorting helper
 const sortByPrice = (a, b) => {
-    if (a[SORT_FIELD_NAME] > b[SORT_FIELD_NAME]){
+    if (a[SORT_FIELD_NAME] > b[SORT_FIELD_NAME]) {
         return -1;
     }
     if (a[SORT_FIELD_NAME] < b[SORT_FIELD_NAME])
@@ -16,6 +16,6 @@ const sortByPrice = (a, b) => {
     //return (a[SORT_FIELD_NAME] > b[SORT_FIELD_NAME]) - (a[SORT_FIELD_NAME] < b[SORT_FIELD_NAME])
 };
 
-module.exports =  {
+module.exports = {
     sortByPrice: sortByPrice
 };

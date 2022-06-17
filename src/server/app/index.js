@@ -26,9 +26,8 @@ if (config.PRODUCTION) {
 app.use(logger(config.DEVELOPMENT ? "dev" : "short"));
 
 // JSON parser
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-
 
 
 // Sessions support

@@ -1,27 +1,28 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
-import {HouseCardList} from "../../components/housecardlist";
 import GoogleMapCard from "../../components/googleMapCard";
-import axios from "axios";
-import ErrorBase from "../../components/error";
 import {
+    Badge,
+    Button,
     Card,
     CardBody,
-    CardColumns,
+    CardFooter,
+    CardHeader,
     CardImg,
+    CardSubtitle,
     CardTitle,
-    ModalHeader,
     Col,
     Container,
-    Modal,
     ModalBody,
-    Row,
-    ModalFooter, Button, Alert, CardHeader, CardFooter, Collapse, Badge, CardSubtitle
+    ModalFooter,
+    ModalHeader,
+    Row
 } from "shards-react";
 import HouseCard from "../../components/houseCard";
+import {Modal} from "react-bootstrap";
 
 const CardMargins = styled.div`
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 `
 
 function NextStateButton({nextState, setRatingStatus, valid}) {
@@ -44,7 +45,7 @@ function NextStateButton({nextState, setRatingStatus, valid}) {
     )
 }
 
-export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
+export default function ExploreOptions({setRatingStatus, houses, nextState}) {
     // Show intro modal
     const [showTutorial, setShowTutorial] = useState(true);
 
@@ -94,7 +95,9 @@ export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
                                         Please look at all of the houses.
                                     </li>
                                     <li>
-                                        <b><span style={{color: "red"}}>You have to view the interiors of each and every house</span><b/> by clicking <Badge>View More Photos &rarr;</Badge> or by selecting it on the map.</b>
+                                        <b><span style={{color: "red"}}>You have to view the interiors of each and every house</span><b/> by
+                                            clicking <Badge>View More Photos &rarr;</Badge> or by selecting it on the
+                                            map.</b>
                                     </li>
                                     <li>
                                         <b>You will not be compensated unless you complete this task.</b>
@@ -102,7 +105,8 @@ export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
                                 </ul>
                             </CardBody>
                             <CardFooter>
-                                <b>YOU MUST EXPLORE ALL OF THE HOUSES BEFORE YOU WILL BE ABLE TO <Badge theme={"success"}>Continue</Badge>.</b>
+                                <b>YOU MUST EXPLORE ALL OF THE HOUSES BEFORE YOU WILL BE ABLE TO <Badge
+                                    theme={"success"}>Continue</Badge>.</b>
                             </CardFooter>
                         </Card>
                     </CardMargins>
@@ -147,7 +151,13 @@ export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
                     </div>
                 </Col>
             </Row>
-            <Modal size={"lg"} open={!!curHouse} toggle={() => setCurHouse(null)} backdrop className={"modal-dialog-scrollable"} >
+            <Modal
+                size={"lg"}
+                show={!!curHouse}
+                onHide={() => setCurHouse(null)}
+                backdrop
+                scrollable
+            >
                 {!!curHouse && (
                     <React.Fragment>
                         <CardHeader>
@@ -167,7 +177,10 @@ export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
                                 {curHouse.bedrooms} bd | {curHouse.bathrooms} ba | {curHouse.sqft} sqft
                             </p>
                         </CardHeader>
-                        <ModalBody>
+                        <Modal.Body style={{
+                            maxHeight: 'calc(100vh - 300px)',
+                            overflowY: 'auto'
+                        }}>
                             <Container>
                                 <Row>
                                     {curHouse.photos.map(p => {
@@ -175,32 +188,34 @@ export default function ExploreOptions ({setRatingStatus, houses, nextState}) {
                                         return <Col>
                                             <CardMargins>
                                                 <Card>
-                                                    <CardImg src={url} style={{ objectFit: "cover" }}/>
+                                                    <CardImg src={url} style={{objectFit: "cover"}}/>
                                                 </Card>
                                             </CardMargins>
                                         </Col>
                                     })}
                                 </Row>
                             </Container>
-                        </ModalBody>
+                        </Modal.Body>
                         <ModalFooter>
                             <Button onClick={() => setCurHouse(null)}>Close</Button>
                         </ModalFooter>
                     </React.Fragment>
                 )}
             </Modal>
-            <Modal size={"lg"} open={showTutorial} backdrop>
+            <Modal size={"lg"} show={showTutorial} backdrop>
                 <ModalHeader>Welcome to The Neighborhood!</ModalHeader>
                 <ModalBody>
                     <span style={{fontSize: "1.5rem"}}>
                         <p>
                             To get started, please <b>look at all of the houses.</b>
                         </p>
-                        <p >
-                            <b><span style={{color: "red"}}>You have to view the interiors of each and every house</span></b> by clicking <Badge>View More Photos &rarr;</Badge> or by selecting it on the map. You will not be compensated unless you complete this task.
+                        <p>
+                            <b><span
+                                style={{color: "red"}}>You have to view the interiors of each and every house</span></b> by clicking <Badge>View More Photos &rarr;</Badge> or by selecting it on the map. You will not be compensated unless you complete this task.
                         </p>
                         <p style={{marginBottom: 0}}>
-                            <b>YOU MUST EXPLORE ALL THE HOUSES BEFORE YOU WILL BE ABLE TO <Badge theme={"success"}>Continue</Badge>.</b>
+                            <b>YOU MUST EXPLORE ALL THE HOUSES BEFORE YOU WILL BE ABLE TO <Badge
+                                theme={"success"}>Continue</Badge>.</b>
                         </p>
                     </span>
                 </ModalBody>

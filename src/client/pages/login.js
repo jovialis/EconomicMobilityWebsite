@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import axios from "axios";
-import ErrorBase from "../components/error";
 import {
+    Alert,
     Button,
     Card,
     CardBody,
@@ -11,13 +11,10 @@ import {
     CardTitle,
     Col,
     Container,
-    Form,
-    FormGroup,
     FormInput,
     Row,
-    Alert
 } from "shards-react";
-import {FormLabel} from "react-bootstrap";
+import {Form, FormLabel} from "react-bootstrap";
 
 /*******************************************************************/
 
@@ -107,15 +104,16 @@ export default function LoginPage({updateStatus, setRespondent}) {
         <Container>
             <Row>
                 <Col>
-                    <Card>
-                        <CardHeader>
-                            Sign In
-                        </CardHeader>
-                        <CardBody>
-                            <CardTitle>Neighborhood Explorer</CardTitle>
-                            <p>Welcome! This is part of our housing survey. This platform gives you a chance to explore houses in your neighborhood and tell us your favorite.</p>
-                            <p>To continue, please enter the unique, 9-digit ID that was provided to you.</p>
-                            <Form>
+                    <Form onSubmit={submit}>
+                        <Card>
+                            <CardHeader>
+                                Sign In
+                            </CardHeader>
+                            <CardBody>
+                                <CardTitle>Neighborhood Explorer</CardTitle>
+                                <p>Welcome! This is part of our housing survey. This platform gives you a chance to
+                                    explore houses in your neighborhood and tell us your favorite.</p>
+                                <p>To continue, please enter the unique, 9-digit ID that was provided to you.</p>
                                 <FormLabel><b>Your 9-Digit ID</b></FormLabel>
                                 <FormInput
                                     placeholder={"e.g. 123456789"}
@@ -125,27 +123,26 @@ export default function LoginPage({updateStatus, setRespondent}) {
                                         setError(null);
                                         validate(e.target.value);
                                     }}
-                                    name="name"
                                     invalid={!valid}
                                 />
-                            </Form>
-                        </CardBody>
-                        <CardFooter>
-                            <Button
-                                disabled={!valid}
-                                onClick={submit}
-                            >Continue</Button>
-                        </CardFooter>
-                        <Alert
-                            dismissible={() => {
-                                setError(null);
-                            }}
-                            open={!!error}
-                            theme={"danger"}
-                        >
-                            {error}
-                        </Alert>
-                    </Card>
+                            </CardBody>
+                            <CardFooter>
+                                <Button
+                                    disabled={!valid}
+                                    onClick={submit}
+                                >Continue</Button>
+                            </CardFooter>
+                            <Alert
+                                dismissible={() => {
+                                    setError(null);
+                                }}
+                                open={!!error}
+                                theme={"danger"}
+                            >
+                                {error}
+                            </Alert>
+                        </Card>
+                    </Form>
                 </Col>
             </Row>
         </Container>

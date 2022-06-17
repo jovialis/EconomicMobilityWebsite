@@ -55,7 +55,7 @@ router.post('/zip', async (req, res, next) => {
 
     // Fail if the respondent has already set their ZIP code
     if (req.session.respondent.zip) {
-        return res.status(400).json({ error: 'You already set your ZIP code. Please refresh the page.' });
+        return res.status(400).json({error: 'You already set your ZIP code. Please refresh the page.'});
     }
 
     // Validation schema

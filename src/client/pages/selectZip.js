@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import axios from "axios";
-import ErrorBase from "../components/error";
 import {
     Alert,
     Button,
@@ -12,10 +11,10 @@ import {
     CardTitle,
     Col,
     Container,
-    Form, FormInput,
+    FormInput,
     Row
 } from "shards-react";
-import {FormLabel} from "react-bootstrap";
+import {Form, FormLabel} from "react-bootstrap";
 
 /*************************************************************************/
 
@@ -75,7 +74,7 @@ export default function SelectZipPage({updateStatus, updateZIP}) {
         }
 
         // backend data requests for this zip
-        axios.post(`/api/respondent/zip`,{
+        axios.post(`/api/respondent/zip`, {
             zip
         }, {
             withCredentials: true
@@ -92,15 +91,16 @@ export default function SelectZipPage({updateStatus, updateZIP}) {
         <Container>
             <Row>
                 <Col>
-                    <Card>
-                        <CardHeader>
-                            Enter ZIP
-                        </CardHeader>
-                        <CardBody>
-                            <CardTitle>Neighborhood Explorer</CardTitle>
-                            <p>Awesome! Let's get started.</p>
-                            <p>We're  going to show you houses in your community. Please enter your 5-digit ZIP code.</p>
-                            <Form>
+                    <Form onSubmit={submit}>
+                        <Card>
+                            <CardHeader>
+                                Enter ZIP
+                            </CardHeader>
+                            <CardBody>
+                                <CardTitle>Neighborhood Explorer</CardTitle>
+                                <p>Awesome! Let's get started.</p>
+                                <p>We're going to show you houses in your community. Please enter your 5-digit ZIP
+                                    code.</p>
                                 <FormLabel>
                                     <b>Your ZIP Code</b>
                                 </FormLabel>
@@ -112,28 +112,27 @@ export default function SelectZipPage({updateStatus, updateZIP}) {
                                         setError(null);
                                         validate(e.target.value);
                                     }}
-                                    name="postal"
                                     invalid={!valid}
                                 />
                                 <small>This information cannot be traced back to you.</small>
-                            </Form>
-                        </CardBody>
-                        <CardFooter>
-                            <Button
-                                disabled={!valid}
-                                onClick={submit}
-                            >Continue</Button>
-                        </CardFooter>
-                        <Alert
-                            dismissible={() => {
-                                setError(null);
-                            }}
-                            open={!!error}
-                            theme={"danger"}
-                        >
-                            {error}
-                        </Alert>
-                    </Card>
+                            </CardBody>
+                            <CardFooter>
+                                <Button
+                                    disabled={!valid}
+                                    onClick={submit}
+                                >Continue</Button>
+                            </CardFooter>
+                            <Alert
+                                dismissible={() => {
+                                    setError(null);
+                                }}
+                                open={!!error}
+                                theme={"danger"}
+                            >
+                                {error}
+                            </Alert>
+                        </Card>
+                    </Form>
                 </Col>
             </Row>
         </Container>

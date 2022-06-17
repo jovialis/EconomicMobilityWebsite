@@ -3,21 +3,7 @@
  **/
 
 import React from "react";
-import {
-    Alert,
-    Button,
-    Card,
-    CardBody,
-    CardFooter,
-    CardHeader, CardSubtitle,
-    CardTitle,
-    Col,
-    Container,
-    Form,
-    FormInput,
-    Row
-} from "shards-react";
-import {FormLabel} from "react-bootstrap";
+import {Card, CardBody, CardHeader, CardSubtitle, CardTitle, Col, Container, Row} from "shards-react";
 
 export default function CompletedPage({}) {
     return (

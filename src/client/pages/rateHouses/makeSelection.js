@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {HouseCardList} from "../../components/housecardlist";
-import GoogleMapCard from "../../components/googleMapCard";
-import axios from "axios";
-import ErrorBase from "../../components/error";
+
 import {
     Card,
     CardBody,
@@ -13,7 +10,6 @@ import {
     ModalHeader,
     Col,
     Container,
-    Modal,
     ModalBody,
     Row,
     ModalFooter, Button, Alert, CardHeader, CardFooter, Collapse, Badge, CardSubtitle, FormCheckbox
@@ -21,6 +17,7 @@ import {
 import HouseCard from "../../components/houseCard";
 import {func} from "prop-types";
 import {Image} from "react-bootstrap";
+import {Modal, ModalDialog} from "react-bootstrap";
 
 const CardMargins = styled.div`
     margin-bottom: 2rem;
@@ -47,7 +44,16 @@ function NextStateButton({nextState, setRatingStatus, valid, selectedHouse, setS
     )
 }
 
-export default function MakeSelection({setRatingStatus, houses, nextState, prompt, setSelection, itemPrompt, excludeHouses, finalSelection}) {
+export default function MakeSelection({
+                                          setRatingStatus,
+                                          houses,
+                                          nextState,
+                                          prompt,
+                                          setSelection,
+                                          itemPrompt,
+                                          excludeHouses,
+                                          finalSelection
+                                      }) {
     // Exclude certain houses that have already been picked
     const excludedHousesIndexes = (excludeHouses || []).map(h => h.index);
     houses = houses.filter(h => !excludedHousesIndexes.includes(h.index));
@@ -145,7 +151,13 @@ export default function MakeSelection({setRatingStatus, houses, nextState, promp
                     </div>
                 </Col>
             </Row>
-            <Modal size={"lg"} open={!!curHouse} toggle={() => setCurHouse(null)} backdrop className={"modal-dialog-scrollable"} >
+            <Modal
+                size={"lg"}
+                show={!!curHouse}
+                onHide={() => setCurHouse(null)}
+                backdrop
+                scrollable
+            >
                 {!!curHouse && (
                     <React.Fragment>
                         <CardHeader>
@@ -165,7 +177,10 @@ export default function MakeSelection({setRatingStatus, houses, nextState, promp
                                 {curHouse.bedrooms} bd | {curHouse.bathrooms} ba | {curHouse.sqft} sqft
                             </p>
                         </CardHeader>
-                        <ModalBody>
+                        <ModalBody style={{
+                            maxHeight: 'calc(100vh - 300px)',
+                            overflowY: 'auto'
+                        }}>
                             <Container>
                                 <Row>
                                     {curHouse.photos.map(p => {
@@ -200,16 +215,16 @@ export default function MakeSelection({setRatingStatus, houses, nextState, promp
                     </React.Fragment>
                 )}
             </Modal>
-            <Modal size={"lg"} open={showTutorial} backdrop>
+            <Modal size={"lg"} show={showTutorial} backdrop>
                 <ModalHeader>
                     {prompt}
                 </ModalHeader>
                 <ModalBody>
                     <p style={{marginBottom: 0}}>
                         {prompt} by clicking <span style={{
-                            display: "inline-block",
-                            fontWeight: "bold"
-                        }}><FormCheckbox toggle checked={false} small>{itemPrompt}</FormCheckbox></span>.
+                        display: "inline-block",
+                        fontWeight: "bold"
+                    }}><FormCheckbox toggle checked={false} small>{itemPrompt}</FormCheckbox></span>.
                     </p>
                 </ModalBody>
                 <ModalFooter>
