@@ -14,6 +14,8 @@ let incompleteRatingSchema = new mongoose.Schema({
     worstAddress2: {type: mongoose.Types.ObjectId, ref: "Home", default: null}, // Second worst
     worstAddress1: {type: mongoose.Types.ObjectId, ref: "Home", default: null}, // Worst
 
+}, {
+    collection: "incompleteRatings"
 });
 
 mongoose.model('IncompleteRating', incompleteRatingSchema);

@@ -20,6 +20,8 @@ let ratingSchema = new mongoose.Schema({
         default: Date.now
     },
 
+}, {
+    collection: "ratings"
 });
 
 mongoose.model('Rating', ratingSchema);
