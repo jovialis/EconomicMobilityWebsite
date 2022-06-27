@@ -24,12 +24,6 @@ router.post('/', async (req, res, next) => {
         return res.status(401).send({error: "Not logged in."});
     }
 
-    // Prevent double rating
-    const existingRating = await Rating.findOne({respondent: req.session.respondent});
-    if (existingRating) {
-        return res.status(401).send({error: "Cannot submit two entries."});
-    }
-
     // Make sure there has been a Home Sample generated.
     const sample = await HomeSample.findOne({respondent: req.session.respondent});
     if (!sample) {
@@ -71,6 +65,11 @@ router.post('/', async (req, res, next) => {
 
     if (!ratingSchema.bestAddress1 || !ratingSchema.bestAddress2 || !ratingSchema.worstAddress1 || !ratingSchema.worstAddress2) {
         return res.status(400).json({error: "An error occurred while looking up one of the addresses."});
+    }
+
+    // Prevent double rating
+    if (await Rating.exists({respondent: req.session.respondent})) {
+        return res.status(401).send({error: "Cannot submit two entries."});
     }
 
     // Generate the rating
